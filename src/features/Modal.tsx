@@ -7,9 +7,10 @@ const DUMMY_RESPONSE =
 interface ModalProps {
   isModalOpen: boolean
   handleModalClose: () => void
+  element: HTMLElement
 }
 
-const Modal: FC<ModalProps> = ({ isModalOpen, handleModalClose }) => {
+const Modal: FC<ModalProps> = ({ isModalOpen, handleModalClose, element }) => {
   const [userPrompt, setUserPrompt] = useState<string>("")
   const [promptVal, setPromptVal] = useState<string>("")
   const [promptError, setPromptError] = useState<string>("")
@@ -37,6 +38,21 @@ const Modal: FC<ModalProps> = ({ isModalOpen, handleModalClose }) => {
   const handlePromptChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPromptError("")
     setPromptVal(e.target.value)
+  }
+
+  const handleInsert = () => {
+    if (response === "") {
+      setPromptError("Wait for the response!")
+      return
+    }
+    setIsGenerated(false)
+    setResponse("")
+    setUserPrompt("")
+    setPromptError("")
+
+    element.focus()
+    document.execCommand("insertText", false, response)
+    handleModalClose()
   }
 
   return (
@@ -74,7 +90,9 @@ const Modal: FC<ModalProps> = ({ isModalOpen, handleModalClose }) => {
         )}
         {isGenerated ? (
           <div className="flex justify-end items-center gap-4">
-            <button className="bg-transparent border border-gray-700  px-1 py-2 rounded w-fit text-lg font-semibold flex flex-row items-center justify-center gap-1">
+            <button
+              onClick={handleInsert}
+              className="bg-transparent border border-gray-700  px-1 py-2 rounded w-fit text-lg font-semibold flex flex-row items-center justify-center gap-1">
               <InsertIcon className="w-6 h-6 text-black" />
               Insert
             </button>

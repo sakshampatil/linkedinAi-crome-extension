@@ -1,7 +1,7 @@
 import { AiIcon } from "assets/icons"
 import cssText from "data-text:~style.css"
 import type { PlasmoCSConfig } from "plasmo"
-import { Fragment, useEffect, useState } from "react"
+import { Fragment, useEffect, useState, type MouseEvent } from "react"
 
 import Modal from "~features/Modal"
 
@@ -30,13 +30,6 @@ const PlasmoOverlay = () => {
       }
     }
 
-    // const handleFocusOut = (event: Event) => {
-    //   const target = event.target as HTMLElement
-    //   if (target && target.matches(".msg-form__contenteditable")) {
-    //     setIsFocused(false)
-    //   }
-    // }
-
     document.addEventListener("focusin", handleFocusIn)
     // document.addEventListener("focusout", handleFocusOut)
     return () => {
@@ -45,7 +38,10 @@ const PlasmoOverlay = () => {
     }
   }, [])
 
-  const handleModalOpen = () => {
+  const handleModalOpen = (
+    e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
+  ) => {
+    // e.stopPropagation()
     setIsModalOpen(true)
   }
 
@@ -57,7 +53,7 @@ const PlasmoOverlay = () => {
     <Fragment>
       {isFocused && element !== null && (
         <div
-          onClick={handleModalOpen}
+          onClick={(e) => handleModalOpen(e)}
           className={`cursor-pointer fixed `}
           style={{
             top: `${element.getBoundingClientRect().bottom - 40}px`,
@@ -66,7 +62,13 @@ const PlasmoOverlay = () => {
           <AiIcon />
         </div>
       )}
-      {isModalOpen && <Modal isModalOpen handleModalClose={handleModalClose} />}
+      {isModalOpen && (
+        <Modal
+          isModalOpen
+          handleModalClose={handleModalClose}
+          element={element}
+        />
+      )}
     </Fragment>
   )
 }
