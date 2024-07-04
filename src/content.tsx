@@ -3,6 +3,8 @@ import cssText from "data-text:~style.css"
 import type { PlasmoCSConfig } from "plasmo"
 import { useEffect, useState } from "react"
 
+import Modal from "~features/Modal"
+
 export const config: PlasmoCSConfig = {
   matches: ["https://*.linkedin.com/*"]
 }
@@ -34,7 +36,7 @@ const PlasmoOverlay = () => {
     }
 
     document.addEventListener("focusin", handleFocusIn)
-    document.addEventListener("focusout", handleFocusOut)
+    // document.addEventListener("focusout", handleFocusOut)
     return () => {
       document.removeEventListener("focusin", handleFocusIn)
       document.removeEventListener("focusout", handleFocusOut)
@@ -44,13 +46,16 @@ const PlasmoOverlay = () => {
   return (
     isFocused &&
     element !== null && (
-      <div
-        className={`cursor-pointer absolute `}
-        style={{
-          top: `${element.getBoundingClientRect().bottom - 40}px`,
-          left: `${element.getBoundingClientRect().right - 50}px`
-        }}>
-        <AiIcon className={""} />
+      <div>
+        <div
+          className={`cursor-pointer fixed `}
+          style={{
+            top: `${element.getBoundingClientRect().bottom - 40}px`,
+            left: `${element.getBoundingClientRect().right - 50}px`
+          }}>
+          <AiIcon className={""} />
+        </div>
+        <Modal />
       </div>
     )
   )
