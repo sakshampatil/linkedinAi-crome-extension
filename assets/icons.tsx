@@ -1,4 +1,10 @@
-export const AiIcon = ({ className }) => {
+import type { FC } from "react"
+
+interface IconProps {
+  className?: string
+}
+
+export const AiIcon: FC<IconProps> = ({ className = "" }) => {
   return (
     <svg
       className={className}
@@ -82,7 +88,7 @@ export const AiIcon = ({ className }) => {
   )
 }
 
-export const GenerateIcon = ({ className }) => {
+export const GenerateIcon: FC<IconProps> = ({ className = "" }) => {
   return (
     <svg
       className={className}

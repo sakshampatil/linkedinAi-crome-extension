@@ -1,7 +1,7 @@
 import { AiIcon } from "assets/icons"
 import cssText from "data-text:~style.css"
 import type { PlasmoCSConfig } from "plasmo"
-import { useEffect, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
 
 import Modal from "~features/Modal"
 
@@ -17,6 +17,7 @@ export const getStyle = () => {
 const PlasmoOverlay = () => {
   const [isFocused, setIsFocused] = useState<boolean>(false)
   const [element, setElement] = useState<HTMLElement | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
   useEffect(() => {
     const handleFocusIn = (event: Event) => {
@@ -24,40 +25,49 @@ const PlasmoOverlay = () => {
       if (target && target.matches(".msg-form__contenteditable")) {
         setIsFocused(true)
         setElement(target)
+      } else {
+        setIsFocused(false)
       }
     }
 
-    const handleFocusOut = (event: Event) => {
-      const target = event.target as HTMLElement
-      if (target && target.matches(".msg-form__contenteditable")) {
-        setIsFocused(false)
-        setElement(null)
-      }
-    }
+    // const handleFocusOut = (event: Event) => {
+    //   const target = event.target as HTMLElement
+    //   if (target && target.matches(".msg-form__contenteditable")) {
+    //     setIsFocused(false)
+    //   }
+    // }
 
     document.addEventListener("focusin", handleFocusIn)
     // document.addEventListener("focusout", handleFocusOut)
     return () => {
       document.removeEventListener("focusin", handleFocusIn)
-      document.removeEventListener("focusout", handleFocusOut)
+      // document.removeEventListener("focusout", handleFocusOut)
     }
   }, [])
 
+  const handleModalOpen = () => {
+    setIsModalOpen(true)
+  }
+
+  const handleModalClose = () => {
+    setIsModalOpen(false)
+  }
+
   return (
-    isFocused &&
-    element !== null && (
-      <div>
+    <Fragment>
+      {isFocused && element !== null && (
         <div
+          onClick={handleModalOpen}
           className={`cursor-pointer fixed `}
           style={{
             top: `${element.getBoundingClientRect().bottom - 40}px`,
             left: `${element.getBoundingClientRect().right - 50}px`
           }}>
-          <AiIcon className={""} />
+          <AiIcon />
         </div>
-        <Modal />
-      </div>
-    )
+      )}
+      {isModalOpen && <Modal isModalOpen handleModalClose={handleModalClose} />}
+    </Fragment>
   )
 }
 
