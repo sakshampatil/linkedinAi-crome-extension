@@ -31,17 +31,13 @@ const PlasmoOverlay = () => {
     }
 
     document.addEventListener("focusin", handleFocusIn)
-    // document.addEventListener("focusout", handleFocusOut)
+
     return () => {
       document.removeEventListener("focusin", handleFocusIn)
-      // document.removeEventListener("focusout", handleFocusOut)
     }
   }, [])
 
-  const handleModalOpen = (
-    e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
-  ) => {
-    // e.stopPropagation()
+  const handleModalOpen = () => {
     setIsModalOpen(true)
   }
 
@@ -53,7 +49,7 @@ const PlasmoOverlay = () => {
     <Fragment>
       {isFocused && element !== null && (
         <div
-          onClick={(e) => handleModalOpen(e)}
+          onClick={handleModalOpen}
           className={`cursor-pointer fixed `}
           style={{
             top: `${element.getBoundingClientRect().bottom - 40}px`,
